@@ -3,7 +3,7 @@ FROM gcr.io/stacksmith-images/minideb:jessie-r8
 MAINTAINER Bitnami <containers@bitnami.com>
 
 ENV BITNAMI_APP_NAME=sugarcrm \
-    BITNAMI_IMAGE_VERSION=6.5.24-r3 \
+    BITNAMI_IMAGE_VERSION=6.5.24-r4 \
     PATH=/opt/bitnami/php/bin:/opt/bitnami/mysql/bin/:$PATH
 
 # Additional modules required
