@@ -30,7 +30,7 @@ ln -fs /opt/bitnami/sugarcrm/conf/cron /etc/cron.d/sugarcrm
 
 
 if [[ "$1" == "nami" && "$2" == "start" ]] ||  [[ "$1" == "/init.sh" ]]; then
-   for module in apache sugarcrm; do
+   for module in apache php sugarcrm; do
     initialize $module
    done
    echo "Starting application ..."
