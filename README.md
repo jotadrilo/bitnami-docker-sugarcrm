@@ -28,7 +28,7 @@ Running SugarCRM with a database server is the recommended way. You can either u
 
 This is the recommended way to run SugarCRM. You can use the following docker compose template:
 
-```
+```yaml
 version: '2'
 
 services:
@@ -63,13 +63,13 @@ If you want to run the application manually instead of using docker-compose, the
 
 1. Create a new network for the application and the database:
 
-  ```
+  ```bash
   $ docker network create sugarcrm_network
   ```
 
 2. Start a MariaDB database in the network generated:
 
-  ```
+  ```bash
    $ docker run -d --name mariadb --net=sugarcrm_network bitnami/mariadb
   ```
 
@@ -77,7 +77,7 @@ If you want to run the application manually instead of using docker-compose, the
 
 3. Run the SugarCRM container:
 
-  ```
+  ```bash
   $ docker run -d -p 80:80 --name sugarcrm --net=sugarcrm_network bitnami/sugarcrm
   ```
 
@@ -97,7 +97,7 @@ To avoid inadvertent removal of these volumes you can [mount host directories as
 
 This requires a minor change to the `docker-compose.yml` template previously shown:
 
-```
+```yaml
 version: '2'
 
 services:
@@ -124,13 +124,13 @@ In this case you need to specify the directories to mount on the run command. Th
 
 1. Create a network (if it does not exist):
 
-  ```
+  ```bash
   $ docker network create sugarcrm-tier
   ```
 
 2. Create a MariaDB container with host volume:
 
-  ```
+  ```bash
   $$ docker run -d --name mariadb \
     --net sugarcrm-tier \
     --volume /path/to/mariadb-persistence:/bitnami/mariadb \
@@ -140,7 +140,7 @@ In this case you need to specify the directories to mount on the run command. Th
 
 3. Create the SugarCRM container with host volumes:
 
-  ```
+  ```bash
   $ docker run -d --name sugarcrm -p 80:80 -p 443:443 \
     --net sugarcrm-tier \
     --volume /path/to/sugarcrm-persistence:/bitnami/sugarcrm \
@@ -182,22 +182,29 @@ Bitnami provides up-to-date versions of MariaDB and SugarCRM, including security
 
  * For docker-compose add the variable name and value under the application section:
 
-```
+```yaml
 sugarcrm:
   image: bitnami/sugarcrm:latest
   ports:
     - 80:80
+    - 443:443
   environment:
     - SUGARCRM_PASSWORD=my_password
   volumes_from:
-    - drupal_data
+    - sugarcrm_data
 ```
 
  * For manual execution add a `-e` option with each variable and value:
 
-```
- $ docker run -d -e SUGARCRM_PASSWORD=my_password -p 80:80 --name sugarcrm -v /your/local/path/bitnami/sugarcrm:/bitnami/sugarcrm --net=sugarcrm_network bitnami/sugarcrm
-```
+  ```bash
+ $ docker run -d -p 80:80 -p 443:443 --name sugarcrm
+    -e SUGARCRM_PASSWORD=my_password \
+    --net sugar-tier \
+    --volume /path/to/sugarcrm-persistence:/bitnami/sugarcrm \
+    --volume /path/to/apache-persistence:/bitnami/apache \
+    --volume /path/to/php-persistence:/bitnami/php \
+    bitnami/sugarcrm:latest
+  ```
 
 Available variables:
 
@@ -225,11 +232,12 @@ This would be an example of SMTP configuration using a Gmail account:
 
  * docker-compose:
 
-```
+```yaml
   sugarcrm:
     image: bitnami/sugarcrm:latest
     ports:
       - 80:80
+      - 443:443
     environment:
       - SUGARCRM_SMTP_HOST=smtp.gmail.com
       - SUGARCRM_SMTP_USER=your_email@gmail.com
@@ -240,10 +248,19 @@ This would be an example of SMTP configuration using a Gmail account:
 
  * For manual execution:
 
-```
- $ docker run -d -e SUGARCRM_SMTP_HOST=smtp.gmail.com -e SUGARCRM_SMTP_PROTOCOL=TLS -e SUGARCRM_SMTP_PORT=587 -e SUGARCRM_SMTP_USER=your_email@gmail.com -e \
- SUGARCRM_SMTP_PASSWORD=your_password -p 80:80 --name sugarcrm -v /your/local/path/bitnami/sugarcrm:/bitnami/sugarcrm bitnami/sugarcrm
-```
+  ```bash
+  $ docker run -d -p 80:80 -p 443:443 --name sugarcrm  \
+    -e SUGARCRM_SMTP_HOST=smtp.gmail.com \
+    -e SUGARCRM_SMTP_PROTOCOL=TLS \
+    -e SUGARCRM_SMTP_PORT=587 \
+    -e SUGARCRM_SMTP_USER=your_email@gmail.com \
+    -e SUGARCRM_SMTP_PASSWORD=your_password
+    --net sugar-tier \
+    --volume /path/to/sugarcrm-persistence:/bitnami/sugarcrm \
+    --volume /path/to/apache-persistence:/bitnami/apache \
+    --volume /path/to/php-persistence:/bitnami/php \
+    bitnami/sugarcrm:latest
+  ```
 
 # Backing up your application
 
@@ -256,8 +273,8 @@ To backup your application data follow these steps:
 
 2. Copy the SugarCRM data folder in the host:
 
-  ```
-  $ docker cp /your/local/path/bitnami:/bitnami/sugarcrm
+  ```bash
+  $ docker cp /path/to/sugarcrm-persistence:/bitnami/sugarcrm
   ```
 
 # Restoring a backup
@@ -276,9 +293,9 @@ If you encountered a problem running this container, you can file an
 be sure to include the following information in your issue:
 
 - Host OS and version
-- Docker version (`docker version`)
-- Output of `docker info`
-- Version of this container (`echo $BITNAMI_IMAGE_VERSION` inside the container)
+- Docker version (`$ docker version`)
+- Output of `$ docker info`
+- Version of this container (`$ echo $BITNAMI_IMAGE_VERSION` inside the container)
 - The command you used to run the container, and any relevant output you saw (masking any sensitive
 information)
 
@@ -290,7 +307,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+  <http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
