@@ -199,7 +199,7 @@ sugarcrm:
   ```bash
  $ docker run -d -p 80:80 -p 443:443 --name sugarcrm
     -e SUGARCRM_PASSWORD=my_password \
-    --net sugar-tier \
+    --net sugarcrm-tier \
     --volume /path/to/sugarcrm-persistence:/bitnami/sugarcrm \
     --volume /path/to/apache-persistence:/bitnami/apache \
     --volume /path/to/php-persistence:/bitnami/php \
@@ -255,7 +255,7 @@ This would be an example of SMTP configuration using a Gmail account:
     -e SUGARCRM_SMTP_PORT=587 \
     -e SUGARCRM_SMTP_USER=your_email@gmail.com \
     -e SUGARCRM_SMTP_PASSWORD=your_password
-    --net sugar-tier \
+    --net sugarcrm-tier \
     --volume /path/to/sugarcrm-persistence:/bitnami/sugarcrm \
     --volume /path/to/apache-persistence:/bitnami/apache \
     --volume /path/to/php-persistence:/bitnami/php \
