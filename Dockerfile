@@ -1,4 +1,4 @@
-FROM gcr.io/stacksmith-images/minideb:jessie-r8
+FROM gcr.io/stacksmith-images/minideb:jessie-r9
 
 MAINTAINER Bitnami <containers@bitnami.com>
 
@@ -19,6 +19,16 @@ RUN bitnami-pkg install mysql-client-10.1.21-0 --checksum 8e868a3e46bfa59f3fb4e1
 RUN bitnami-pkg unpack sugarcrm-6.5.24-2 --checksum fb69c21dbc338c2cf99b23693febd1c260465c05ee5ee1954125a1d7a1f69563
 
 COPY rootfs /
+
+ENV APACHE_HTTP_PORT="80" \
+    APACHE_HTTPS_PORT="443" \
+    SUGARCRM_USER_NAME="User" \
+    SUGARCRM_LAST_NAME="Name" \
+    SUGARCRM_PASSWORD="bitnami" \
+    SUGARCRM_EMAIL="user@example.com" \
+    MARIADB_USER="root" \
+    MARIADB_HOST="mariadb" \
+    MARIADB_PORT="3306"
 
 VOLUME ["/bitnami/sugarcrm", "/bitnami/apache", "/bitnami/php"]
 
