@@ -20,6 +20,16 @@ RUN bitnami-pkg unpack sugarcrm-6.5.24-2 --checksum fb69c21dbc338c2cf99b23693feb
 
 COPY rootfs /
 
+ENV APACHE_HTTP_PORT="80" \
+    APACHE_HTTPS_PORT="443" \
+    SUGARCRM_USER_NAME="User" \
+    SUGARCRM_LAST_NAME="Name" \
+    SUGARCRM_PASSWORD="bitnami" \
+    SUGARCRM_EMAIL="user@example.com" \
+    MARIADB_USER="root" \
+    MARIADB_HOST="mariadb" \
+    MARIADB_PORT="3306"
+
 VOLUME ["/bitnami/sugarcrm", "/bitnami/apache", "/bitnami/php"]
 
 EXPOSE 80 443
