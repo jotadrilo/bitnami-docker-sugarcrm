@@ -7,7 +7,7 @@ print_welcome_page
 check_for_updates &
 
 if [[ "$1" == "nami" && "$2" == "start" ]] || [[ "$1" == "/run.sh" ]]; then
-  nami_initialize apache php mysql-client sugarcrm
+  nami_initialize apache php sugarcrm
   info "Starting sugarcrm... "
 fi
 
